@@ -1,0 +1,9 @@
+Features
+
+
+🏦 Market Simulation — A set of default stocks with prices that fluctuate randomly each "tick" to mimic real market movement.
+💰 Buy / Sell Operations — Trade stocks using your simulated cash balance, with checks for insufficient funds or shares.
+📊 Portfolio Tracking — View current holdings, total portfolio value, and a historical log of portfolio value over time.
+🧾 Transaction History — Every buy/sell is logged with timestamp, quantity, price, and total value.
+💾 Persistence — Your portfolio, holdings, and transaction history are saved to portfolio_data.json and automatically reloaded next time you run the program.
+🧱 Clean OOP Design — Built using dedicated classes: Stock, Market, User, Transaction, and TradingPlatform.
