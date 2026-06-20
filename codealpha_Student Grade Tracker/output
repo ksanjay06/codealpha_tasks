@@ -1,0 +1,25 @@
+===== Student Grade Tracker =====
+Enter number of students: 3
+
+Student 1
+Enter student name: John
+Enter grade: 85
+
+Student 2
+Enter student name: Sarah
+Enter grade: 92
+
+Student 3
+Enter student name: Mike
+Enter grade: 78
+
+===== Summary Report =====
+Student Name         Grade
+--------------------------------
+John                 85.00
+Sarah                92.00
+Mike                 78.00
+--------------------------------
+Average Score : 85.00
+Highest Score : 92.00
+Lowest Score  : 78.00
