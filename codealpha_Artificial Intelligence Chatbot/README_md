@@ -1,0 +1,124 @@
+ JavaBot — AI-Powered FAQ Chatbot (Java)
+
+A Java-based chatbot that combines **rule-based dialogue handling** with a
+lightweight, dependency-free **NLP text-similarity engine** to answer
+frequently asked questions in real time. Comes with both a **Swing GUI**
+and a **CLI** front-end.
+
+ ✨ Features
+
+- **Natural Language Processing (from scratch, zero dependencies)**
+  - Tokenization, stopword removal, light stemming
+  - Cosine similarity over term-frequency vectors to match user input
+    against the FAQ knowledge base
+- **Hybrid logic**
+  - Rule-based responses for greetings, thanks, goodbyes, name capture, time
+  - Similarity-based matching for FAQ-style questions
+  - Fallback responses that log unmatched questions to `data/unanswered.txt`
+    for easy review and retraining
+- **Trainable knowledge base** — add new Q&A pairs by editing
+  `data/faqs.txt`, no recompilation needed
+- **Two interfaces**
+  - `ChatbotGUI` — a Swing desktop chat window for real-time interaction
+  - `ChatbotCLI` — a console chat loop for quick testing / headless use
+
+ 🗂 Project Structure
+
+```
+JavaChatbot/
+├── src/
+│   ├── NLPUtils.java       
+│   ├── FAQEntry.java       
+│   ├── ChatbotEngine.java  
+│   ├── ChatbotGUI.java     
+│   └── ChatbotCLI.java     
+├── data/
+│   ├── faqs.txt            
+│   └── unanswered.txt      
+└── README.md
+```
+
+ 🚀 Getting Started
+
+ Prerequisites
+- JDK 8 or higher installed (`javac -version` to check)
+
+ Build
+
+```bash
+cd JavaChatbot
+mkdir -p bin
+javac -d bin src/*.java
+```
+
+ Run the GUI
+
+```bash
+cd JavaChatbot
+java -cp bin ChatbotGUI
+```
+
+> The app reads `data/faqs.txt` relative to your working directory, so run
+> the `java` command from the `JavaChatbot/` root folder.
+
+ Run the CLI
+
+```bash
+cd JavaChatbot
+java -cp bin ChatbotCLI
+```
+
+ 🧠 How the NLP/matching works
+
+1. Both the knowledge base and the user's message are run through the same
+   pipeline: **tokenize → remove stopwords → lightly stem**.
+2. Each FAQ entry's tokens (question + optional extra keywords) are compared
+   against the user's tokens using **cosine similarity** of term-frequency
+   vectors.
+3. The highest-scoring FAQ above a confidence threshold (`0.30`) is returned.
+4. If nothing scores high enough, the bot replies honestly that it isn't
+   sure, and appends the question (plus the closest guess and its score) to
+   `data/unanswered.txt` — a simple human-in-the-loop training signal you can
+   use to grow `faqs.txt` over time.
+
+Rule-based intents (greetings, thanks, goodbye, "what's your name", asking
+the time, etc.) are checked **first**, since they need conversational logic
+rather than FAQ lookup.
+
+ ➕ Training the Bot (Adding FAQs)
+
+Open `data/faqs.txt` and add a new line in this format:
+
+```
+Your question here? || Your answer here. || optional,extra,keywords
+```
+
+Restart the app — no code changes or recompilation required.
+
+ 🔌 Extending to a Web Interface
+
+`ChatbotEngine` has **no GUI dependency**, so it's easy to expose over HTTP:
+
+- Wrap it in a **Spring Boot** `@RestController` with a `POST /chat` endpoint
+  that calls `engine.getResponse(message)`
+- Or drop it into a plain Java **Servlet** running on Tomcat/Jetty
+- Or call it from a **JavaScript fetch()** call in any front-end once it's
+  behind a REST endpoint
+
+This keeps the chatbot's "brain" reusable across GUI, CLI, and web contexts.
+
+## 🛣 Possible Improvements
+
+- Swap the hand-rolled cosine-similarity matcher for a real ML model
+  (e.g. train a classifier with Weka, DL4J, or call out to a Python
+  microservice running scikit-learn/transformers)
+- Persist `unanswered.txt` entries into a database and build an admin UI to
+  promote them into the FAQ knowledge base
+- Add multi-turn context tracking (remembering what the last few messages
+  were about)
+- Package as a Spring Boot app with a small web chat widget (HTML/JS) for
+  full "real-time web interface" integration
+
+## 📄 License
+
+MIT — feel free to use, modify, and share.
